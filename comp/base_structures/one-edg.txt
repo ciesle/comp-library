@@ -1,7 +1,0 @@
-struct edg {
-	int to;
-	long long cst;
-	edg(int to, long long cst) : to(to), cst(cst) {}
-	bool operator<(const edg& b) const { return cst < b.cst; }
-	bool operator>(const edg& b) const { return cst > b.cst; }
-};

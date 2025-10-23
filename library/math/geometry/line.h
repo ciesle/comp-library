@@ -1,0 +1,44 @@
+template<typename T>
+struct line {
+	pair<T, T>pos, dir; //point, direction
+	line(pair<T, T>point, pair<T, T>direction) :pos(point), dir(direction) {
+		T g = gcd(abs(dir.first), abs(dir.second));
+		dir.first /= g;dir.second /= g;
+		if (dir.first < 0) dir.first *= -1, dir.second *= -1;
+		if (dir.first == 0) dir.second = abs(dir.second);
+
+		if (dir.first) {
+			T t = abs(pos.first) / abs(dir.first);
+
+			if (pos.first > 0) {
+				if (dir.first > 0) pos.first -= dir.first * t, pos.second -= dir.second * t;
+				else pos.first -= dir.first * t, pos.second -= dir.second * t;
+			}
+			else {
+				if (abs(pos.first) % abs(dir.first)) t++;
+				if (dir.first > 0) pos.first += dir.first * t, pos.second += dir.second * t;
+				else pos.first -= dir.first * t, pos.second -= dir.second * t;
+			}
+		}
+		else {
+			T t = abs(pos.second) / abs(dir.second);
+			if (pos.second > 0) pos.second -= abs(dir.second) * t;
+			else {
+				if (abs(pos.second) % abs(dir.second)) t++;
+				pos.second += abs(dir.second) * t;
+			}
+		}
+	}
+
+	bool operator<(const line& a)const {
+		if (pos != a.pos) return pos < a.pos;
+		return dir < a.dir;
+	}
+	bool operator>(const line& a)const {
+		if (pos != a.pos) return pos > a.pos;
+		return dir > a.dir;
+	}
+	bool operator==(const line& a)const {
+		return pos == a.pos && dir == a.dir;
+	}
+};

@@ -1,9 +1,0 @@
-int phi(int n) {
-	int m = n, ret = n;
-	for (int i = 2;i * i <= n;i++) if (m % i == 0) {
-		while (m % i == 0) m /= i;
-		ret -= ret / i;
-	}
-	if (m > 1) ret -= ret / m;
-	return ret;
-}

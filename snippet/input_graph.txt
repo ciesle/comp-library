@@ -1,0 +1,8 @@
+vector<vector<int>>e(n);
+for (int i = 0;i < m;i++) {
+	int u, v;
+	tmp = scanf("%d %d", &u, &v);
+	u--;v--;
+	e[u].emplace_back(v);
+	e[v].emplace_back(u);
+}

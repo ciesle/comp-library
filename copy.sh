@@ -1,8 +1,5 @@
 #!/bin/bash
-out_path="./.vscode/auto_build"
 main_path="main.cpp"
-
-echo -e "\e[35;1mdebug build $main_path\e[m"
 
 make ${out_path}/${main_path%%.cpp}_dbg
 if [ $? -ne 0 ]; then

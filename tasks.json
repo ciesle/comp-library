@@ -4,10 +4,10 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "./.vscode/opt_build.sh ${fileBasename}",
+            "command": "./.vscode/opt_build.sh ${fileBasename} direct",
             "group": {
-                "kind":"build",
-                "isDefault": true                
+                "kind": "build",
+                "isDefault": true
             },
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -82,7 +82,7 @@
                 "cwd": "${workspaceFolder}"
             },
             "dependsOn": [
-                "build",
+                "build_main",
             ],
             "dependsOrder": "sequence",
             "presentation": {
@@ -151,7 +151,7 @@
                 "cwd": "${workspaceFolder}"
             },
             "dependsOn": [
-                "build",
+                "build_main",
             ],
             "dependsOrder": "sequence",
             "presentation": {
@@ -169,8 +169,8 @@
             "type": "shell",
             "command": "./.vscode/randcheck.sh",
             "group": {
-                "kind":"test",
-                "isDefault": true                
+                "kind": "test",
+                "isDefault": true
             },
             "args": [
                 "${input:input_args}",
@@ -204,6 +204,63 @@
                 "close": true,
             }
         },
+        {
+            "label": "generic_copy",
+            "type": "shell",
+            "command": "make copy",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "group": "others",
+                "showReuseMessage": false,
+                "clear": true,
+                "close": true
+            }
+        },
+        {
+            "label": "make_intxt",
+            "type": "shell",
+            "command": "xsel -bo > in.txt",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "group": "others",
+                "showReuseMessage": false,
+                "clear": true,
+                "close": true
+            }
+        },
+        {
+            "label": "run_with_copy",
+            "type": "shell",
+            "command": "xsel -bo > in.txt && ./main < in.txt",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": [
+                "build",
+            ],
+            "dependsOrder": "sequence",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+                "group": "run",
+            }
+        }
     ],
     "inputs": [
         {

@@ -1,14 +1,16 @@
+SHELL := bash
+.SHELLFLAGS := -o pipefail -ec
 CC = g++
-CFLAGS_OPT = -std=c++20 -O2 -I../library/include
-CFLAGS_DBG = -std=c++20 -O0 -g -I../library/include
+CFLAGS_OPT = -std=gnu++23 -O2 -I../library/include -fsanitize=address,undefined
+CFLAGS_DBG = -std=gnu++23 -O0 -g3 -I../library/include -fsanitize=address,undefined
 OUT_DIR = ./.vscode/auto_build
 
-LIBRARIES:=$(shell find ./library/ -type f)
+LIBRARIES:=$(shell find ./snippet/ -type f)
 SNIP_PATH=./.vscode/comp.json.code-snippets
 ADD_SH=../library/add.sh
 
 $(OUT_DIR)/main: main.cpp
-	$(CC) $(CFLAGS_OPT) -o $@ $^ 
+	$(CC) $(CFLAGS_OPT) -o $@ $^
 $(OUT_DIR)/brute: brute.cpp
 	$(CC) $(CFLAGS_OPT) -o $@ $^
 $(OUT_DIR)/gen: gen.cpp
@@ -28,15 +30,27 @@ gen: $(OUT_DIR)/gen
 main_dbg: $(OUT_DIR)/main_dbg
 	@rm -f ./$@
 	@cp $^ ./
+diff: diff.cpp
+	$(CC) $(CFLAGS_OPT) -o $@ $^
 
 .PHONY: clean
 clean:
-	@rm -f main brute gen main_dbg a.out test rnd*
+	@rm -f main brute gen main_dbg a.out test rnd* $(OUT_DIR)/*
+
+.PHONY: clean_main
+clean_main:
+	@rm -f main $(OUT_DIR)/main*
 
 .PHONY: gdb_clean
 gdb_clean:
 	@ls peda-session* && rm peda-session* || :
 	@if [ -e .gdb_history ]; then rm gdb_history; fi
+
+.PHONY: copy
+copy:
+	@printf "\e[35;1mcopy start\e[m\n"
+	@include-what-you-use -std=gnu++23 -I../library/include main.cpp 2>&1 | ../library/expand_include.py | xsel -bi
+	@printf "\e[35;1mcopy end\e[m\n"
 
 .PHONY: snippet
 snippet:

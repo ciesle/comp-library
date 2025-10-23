@@ -1,0 +1,21 @@
+template<typename T>
+class SquareDecomposition : public SquareDecompositionBase<T> {
+	using F = function<T(T, T)>;
+public:
+	T zero = T(1, 0);
+	SquareDecomposition(int n, F func) : SquareDecompositionBase<T>(n, func) { this->_zero = zero; this->reset(); }
+	SquareDecomposition(vector<T> v, F func) : SquareDecompositionBase<T>(v, func) { this->_zero = zero; }
+
+	// data : vector of elements
+	// blocks : vector of block sums
+	// update_interval(blockid) : update block sums
+	void update(int pos, T x) override {
+		int id = pos / this->m;
+		this->data[pos].fs *= x.fs;
+		this->data[pos].sc += x.sc;
+		this->blocks[id].fs *= x.fs;
+		this->blocks[id].sc += x.sc;
+	}
+
+	// query(l,r) : return aggregation of [l,r)
+};

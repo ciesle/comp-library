@@ -1,7 +1,0 @@
-template<typename T>
-class Max : virtual public LazySegmentTree<T> {
-protected:
-	T eval(T& l, T& r) {
-		return max(l, r);
-	}
-};

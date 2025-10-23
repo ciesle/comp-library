@@ -1,7 +1,0 @@
-template<typename T>
-class Sum : virtual public LazySegmentTree<T> {
-protected:
-	T eval(T& l, T& r) {
-		return l + r;
-	}
-};

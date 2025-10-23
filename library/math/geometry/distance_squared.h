@@ -1,0 +1,5 @@
+template<typename T>
+T distance_squared(pair<T, T>a, pair<T, T>b) {
+	return (a.first - b.first) * (a.first - b.first) +
+		(a.second - b.second) * (a.second - b.second);
+}

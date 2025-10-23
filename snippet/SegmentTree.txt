@@ -1,0 +1,27 @@
+template<typename T>
+struct Mono {
+	T val, lazy;
+	int len, l, r;
+	//edit identity element!!!
+	Mono() :val(0), lazy(0) {}
+	Mono(T val, T lazy) : val(val), lazy(lazy) {}
+};
+template<typename T>
+class segtree : public SegmentTree::Add<T>, public SegmentTree::Sum<T> {
+public:
+	segtree() : SegmentTree::LazySegmentTree<T>() {}
+	segtree(int n) : SegmentTree::LazySegmentTree<T>(n) {}
+	segtree(vector<T>& v) : SegmentTree::LazySegmentTree<T>(v.size()) {
+		for (int i = 0;i < this->n;i++) this->dat[i + this->rr].val = v[i];
+		for (int i = this->rr - 1;i > 0;i--) this->dat[i].val = this->eval(this->dat[i * 2].val, this->dat[i * 2 + 1].val);
+	}
+	segtree(segtree&& other)noexcept : SegmentTree::LazySegmentTree<T>(move(other)) {}
+	segtree& operator=(segtree&& other) noexcept {
+		if (this != &other) SegmentTree::LazySegmentTree<T>::operator=(move(other));
+		return *this;
+	}
+	bool judge(T pos, T x) {
+		return pos >= x;
+	}
+	//implemented: change, update, query, lower_bound
+};
