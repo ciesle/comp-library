@@ -14,7 +14,7 @@ mkdir -p ../$1/.vscode/auto_build
 $(cd ../$1 && rm -rf ./library && ln -s ../$name/library/ library)
 rm -f ../$1/library/comp
 
-$(cd ../$1/ && rm -rf snippet && ln -s ../../$name/snippet snippet)
+$(cd ../$1/ && rm -rf snippet && ln -s ../$name/snippet snippet)
 
 files=("gdb_exit.sh" "expand_include.py" "launch.json" "randcheck.sh" "c_cpp_properties.json" "dbg_build.sh" "opt_build.sh" "settings.json" "tasks.json")
 for file in ${files[@]};do
