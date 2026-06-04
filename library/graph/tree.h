@@ -1,7 +1,7 @@
 #pragma once
 #include<bits/stdc++.h>
 using namespace std;
-class Tree {
+class tree {
 	void build_dfs(int v, int p) {
 		for (auto& to : e[v]) {
 			if (to == e[v].back() && to == p) continue;
@@ -29,7 +29,7 @@ public:
 	int root;
 	vector<vector<int>>e;
 	//number of nodes, root(-1 if not rooted)
-	Tree(int n, int root = 0) :n(n), e(n), root(root) {}
+	tree(int n, int root = 0) :n(n), e(n), root(root) {}
 	void input_all() {
 		for (int i = 0;i < n - 1;i++) {
 			int a, b; cin >> a >> b;

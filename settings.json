@@ -107,10 +107,5 @@
         "editor.defaultFormatter": "ms-vscode.cpptools"
     },
     "C_Cpp.default.cppStandard": "gnu++23",
-    // Disable the Microsoft C/C++ extension IntelliSense engine so it doesn't show
-    // incorrect diagnostics for some newer C++ features. Use clangd or the
-    // extension's Tag Parser instead.
     "C_Cpp.intelliSenseEngine": "default",
-    // If you prefer the Tag Parser, set the engine to "Tag Parser" instead.
-    // "C_Cpp.intelliSenseEngine": "Tag Parser",
 }

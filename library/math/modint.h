@@ -1,3 +1,7 @@
+#pragma once
+#include <bits/stdc++.h>
+#include "../template.h"
+using namespace std;
 template<unsigned int mod>
 class mymodint {
 public:
@@ -6,8 +10,8 @@ public:
 		if (likely(vv >= 0)) v = vv % mod;
 		else v = (vv % mod + mod) % mod;
 	}
-	constexpr static int fn_ = (int)3e5 + 5;
-	constexpr static int iv_ = (int)3e5 + 5;
+	constexpr static int fn_ = (int)3e6 + 5;
+	constexpr static int iv_ = (int)3e6 + 5;
 	static inline vector<mymodint>fct, comp, iv;
 	mymodint pow(long long x) const {
 		mymodint b(v), c(1);
@@ -24,7 +28,6 @@ public:
 		return *this;
 	}
 	inline mymodint inv()const noexcept {
-		if (unlikely(iv.empty())) invinit();
 		if (likely(v < iv_)) return iv[v];
 		return pow(mod - 2);
 	}
@@ -42,10 +45,14 @@ public:
 	inline mymodint operator-(const mymodint b) const { return mymodint(v) -= b; }
 	inline mymodint operator*(const mymodint b) const { return mymodint(v) *= b; }
 	inline mymodint operator/(const mymodint b) const { return mymodint(v) /= b; }
+	inline bool operator==(const mymodint b) const { return v == b.v; }
+	inline bool operator!=(const mymodint b) const { return v != b.v; }
 	template<typename T>inline friend mymodint operator+(const T a, const mymodint& b) { return mymodint(a) += b; }
 	template<typename T>inline friend mymodint operator-(const T a, const mymodint& b) { return mymodint(a) -= b; }
 	template<typename T>inline friend mymodint operator*(const T a, const mymodint& b) { return mymodint(a) *= b; }
 	template<typename T>inline friend mymodint operator/(const T a, const mymodint& b) { return mymodint(a) /= b; }
+	template<typename T>inline friend mymodint operator==(const T a, const mymodint& b) { return a == b.v; }
+	template<typename T>inline friend mymodint operator!=(const T a, const mymodint& b) { return a != b.v; }
 	friend ostream& operator<<(ostream& os, const mymodint& m) {
 		return os << m.v;
 	}
@@ -53,13 +60,10 @@ public:
 		int x; is >> x; m = mymodint(x);
 		return is;
 	}
-	bool operator==(const mymodint& r)const { return v == r.v; }
-	bool operator!=(const mymodint& r)const { return v != r.v; }
 	explicit operator bool()const { return v; }
 	explicit operator int()const { return v; }
 	mymodint comb(long long k) {
 		if (unlikely(k > v)) return mymodint();
-		if (unlikely(fct.empty())) combinit();
 		if (unlikely(v >= fn_)) {
 			if (k > v - k) k = v - k;
 			mymodint tmp(1);
@@ -70,7 +74,6 @@ public:
 	}//nCk
 	mymodint perm(long long k) {
 		if (unlikely(k > v)) return mymodint();
-		if (unlikely(fct.empty())) combinit();
 		if (unlikely(v >= fn_)) {
 			mymodint tmp(1);
 			for (int i = v - k + 1; i <= v; i++) tmp *= mymodint(i);
@@ -79,7 +82,6 @@ public:
 		return fct[v] * comp[v - k];
 	}//nPk
 	mymodint fact() {
-		if (unlikely(fct.empty())) combinit();
 		if (unlikely(v >= fn_)) {
 			mymodint tmp(1);
 			for (int i = v; i >= 1; i--) tmp *= mymodint(i);
@@ -97,7 +99,8 @@ public:
 	}
 	static void invinit() {
 		iv.assign(iv_, mymodint());
-		for (int i = 1; i < iv_; i++) iv[i] = mymodint(i).pow(mod - 2);
+		iv[1] = 1;
+		for (int i = 2; i < iv_; i++) iv[i] = -iv[mod % i] * (mod / i);
 	}
 	template<typename... T>
 	static mymodint multicomb(T... args) {
@@ -112,3 +115,9 @@ public:
 	}
 };
 using mint = mymodint<mod>;
+using vm = vector<mint>;
+struct mint_initialize {
+	mint_initialize() noexcept {
+		mint::combinit(); mint::invinit();
+	}
+} mint_initialize;

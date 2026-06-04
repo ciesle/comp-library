@@ -6,7 +6,7 @@ if [[ $1 == *.cpp ]]; then
 else
     name="main"
 fi
-if [[ $name == "main" && $# -ne 1 ]]; then
+if [[ $name == "main" && $# -ne 1 || $name != "main" ]]; then
     make clean_main
 fi
 echo -e "\e[35;1mbuild ${name}\e[m"

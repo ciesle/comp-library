@@ -7,16 +7,16 @@ struct Mono {
 	Mono(T val, T lazy) : val(val), lazy(lazy) {}
 };
 template<typename T>
-class segtree : public SegmentTree::Add<T>, public SegmentTree::Sum<T> {
+class Segtree : public SegmentTree::None<T>, public SegmentTree::Update<T> {
 public:
-	segtree() : SegmentTree::LazySegmentTree<T>() {}
-	segtree(int n) : SegmentTree::LazySegmentTree<T>(n) {}
-	segtree(vector<T>& v) : SegmentTree::LazySegmentTree<T>(v.size()) {
+	Segtree() : SegmentTree::LazySegmentTree<T>() {}
+	Segtree(int n) : SegmentTree::LazySegmentTree<T>(n) {}
+	Segtree(vector<T>& v) : SegmentTree::LazySegmentTree<T>(v.size()) {
 		for (int i = 0;i < this->n;i++) this->dat[i + this->rr].val = v[i];
 		for (int i = this->rr - 1;i > 0;i--) this->dat[i].val = this->eval(this->dat[i * 2].val, this->dat[i * 2 + 1].val);
 	}
-	segtree(segtree&& other)noexcept : SegmentTree::LazySegmentTree<T>(move(other)) {}
-	segtree& operator=(segtree&& other) noexcept {
+	Segtree(Segtree&& other)noexcept : SegmentTree::LazySegmentTree<T>(move(other)) {}
+	Segtree& operator=(Segtree&& other) noexcept {
 		if (this != &other) SegmentTree::LazySegmentTree<T>::operator=(move(other));
 		return *this;
 	}

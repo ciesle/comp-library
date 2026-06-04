@@ -1,3 +1,4 @@
+#pragma once
 long long modpow(long long x, long long n, long long m) {
 	long long ret = 1;x %= m;
 	while (n > 0) {

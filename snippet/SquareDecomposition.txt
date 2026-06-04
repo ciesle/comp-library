@@ -8,13 +8,14 @@ public:
 
 	// data : vector of elements
 	// blocks : vector of block sums
-	// update_interval(blockid) : update block sums
+	// update_interval(blockid) : 呼び出すとblock sumsを自動計算してくれる
 	void update(int pos, T x) override {
 		int id = pos / this->m;
 		this->data[pos].fs *= x.fs;
 		this->data[pos].sc += x.sc;
 		this->blocks[id].fs *= x.fs;
 		this->blocks[id].sc += x.sc;
+		//update_interval(id);
 	}
 
 	// query(l,r) : return aggregation of [l,r)

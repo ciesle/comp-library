@@ -191,7 +191,7 @@
         {
             "label": "clean",
             "type": "shell",
-            "command": "make clean",
+            "command": "make clean_main",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -199,9 +199,11 @@
                 "echo": false,
                 "reveal": "never",
                 "focus": false,
-                "panel": "new",
+                "panel": "shared",
                 "group": "others",
-                "close": true,
+                "showReuseMessage": false,
+                "clear": true,
+                "close": true
             }
         },
         {

@@ -18,8 +18,8 @@ def expand_includes(path, included_files, base_dir="library"):
     result_lines = [f"// ===== {path} =====\n"]
     with open(path, "r", encoding="utf-8") as f:
         for line in f:
-            m = re.match(r'\s*#\s*include\s+"([^"]+)"', line)
-            m2 = re.match(r'\s*(#\s*(?:pragma|include\s*<.*>.*))|using namespace std;.*', line)
+            m = re.match(r'\s*#\s*include\s*"([^"]+)"', line)
+            m2 = re.match(r'\s*(#\s*(?:pragma\s+once.*|include\s*<.*>.*))|using namespace std;.*', line)
             if m:
                 inc_path = m.group(1)
                 full_path = os.path.join(os.path.dirname(abs_path), inc_path)
@@ -27,7 +27,7 @@ def expand_includes(path, included_files, base_dir="library"):
                 result_lines.append(f"// >>> begin include: {inc_path}\n")
                 result_lines.append(expanded)
                 result_lines.append(f"// <<< end include: {inc_path}\n")
-            elif not m2:
+            elif not m2 or path == "library/template.h":
                 result_lines.append(line)
 
     return "".join(result_lines)

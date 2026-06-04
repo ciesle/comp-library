@@ -2,7 +2,7 @@
 n, edge, cost(from dijkstra), start, end
 ret: shortest path from start to end
 */
-vector<int>shortest_path(int n, vector<vector<edg>>& e, vector<long long>& cost, int s, int t) {
+vector<int>shortest_path(int n, const vector<vector<edg>>& e, vector<long long>& cost, int s, int t) {
 	vector<int>ret;
 	if (cost[t] == 1e18) return ret;
 	vector<vector<edg>>f(n);

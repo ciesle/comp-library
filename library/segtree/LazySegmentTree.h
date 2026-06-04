@@ -66,6 +66,11 @@ namespace SegmentTree {
 				dat[b].val = eval(dat[b * 2].val, dat[b * 2 + 1].val);
 			}
 		}
+		//return the value of top element
+		T top() {
+			return dat[1].val;
+		}
+		//query
 		T query(int l, int r) {
 			int a = l + rr, b = r + rr - 1;
 			for (int i = height - 1;i > 0;i--) update_all(a >> i), update_all(b >> i);

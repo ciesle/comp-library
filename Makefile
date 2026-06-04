@@ -1,8 +1,8 @@
 SHELL := bash
 .SHELLFLAGS := -o pipefail -ec
 CC = g++
-CFLAGS_OPT = -std=gnu++23 -O2 -I../library/include -fsanitize=address,undefined
-CFLAGS_DBG = -std=gnu++23 -O0 -g3 -I../library/include -fsanitize=address,undefined
+CFLAGS_OPT = -std=gnu++23 -O2 -I../library/include -fsanitize=address,undefined -march=native
+CFLAGS_DBG = -std=gnu++23 -O0 -g3 -I../library/include -fsanitize=address,undefined -march=native
 OUT_DIR = ./.vscode/auto_build
 
 LIBRARIES:=$(shell find ./snippet/ -type f)

@@ -2,9 +2,9 @@
 #include<vector>
 #include<tuple>
 using namespace std;
-//tree size, characters, edge, points (depth = size of T bit)
+//tree size, characters, edge, indexes of strings (depth = size of T bit)
 template<typename T>
-tuple<int, vector<bool>, vector<vector<int>>, vector<vector<int>>>Binary_trie_tree(vector<T>& s) {
+tuple<int, vector<bool>, vector<vector<int>>, vector<vector<int>>>binary_trie_tree(vector<T>& s) {
 	using U = typename std::make_unsigned<T>::type;
 	constexpr int BITS = sizeof(U) * 8;
 	int n = s.size(), m = 1;
