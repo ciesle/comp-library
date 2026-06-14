@@ -49,7 +49,7 @@ gdb_clean:
 .PHONY: copy
 copy:
 	@printf "\e[35;1mcopy start\e[m\n"
-	@include-what-you-use -std=gnu++23 -I../library/include main.cpp 2>&1 | ../library/expand_include.py | xsel -bi
+	@include-what-you-use -std=gnu++23 -I../library/include main.cpp 2>&1 | ../library/expand_include.py | wl-copy
 	@printf "\e[35;1mcopy end\e[m\n"
 
 .PHONY: snippet

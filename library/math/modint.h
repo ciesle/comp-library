@@ -121,3 +121,4 @@ struct mint_initialize {
 		mint::combinit(); mint::invinit();
 	}
 } mint_initialize;
+using vm = vector<mint>;

@@ -1,25 +1,24 @@
+#pragma once
+#include <bits/stdc++.h>
+using namespace std;
 //n-th parent, lca
 //distance of two points, diameter
-class tree_manage {
-	int n, root, log;
+class Tree {
+	int n, root, log, edge_cnt;
 	vector<vector<int>>e, pa;
-	vector<int>dpt;
+	vector<int>dpt, sz;
 public:
-	tree_manage() {}
-	tree_manage(int n, int root = 0) :n(n), root(root) {
-		e.resize(n), dpt.resize(n);
+	Tree() {}
+	Tree(int n, int root = 0) :n(n), root(root), edge_cnt(0) {
+		e.resize(n), dpt.resize(n), sz.resize(n);
 		log = 0;while ((1 << log) <= n) log++;
 		pa.assign(log, vector<int>(n, -1));
-	}
-	tree_manage(int n, vector<vector<int>>& e, int root = 0) :n(n), e(e), root(root) {
-		dpt.resize(n);
-		log = 0;while ((1 << log) <= n) log++;
-		pa.assign(log, vector<int>(n, -1));
-		build();
 	}
 	void add_edge(int x, int y) {
 		e[x].emplace_back(y);
 		e[y].emplace_back(x);
+		edge_cnt++;
+		if (edge_cnt == n - 1 && ~root) build();
 	}
 	void build() {
 		dpt[root] = 0;
@@ -48,6 +47,9 @@ public:
 	int dept(int x) {
 		return dpt[x];
 	}
+	int size(int x) {
+		return sz[x];
+	}
 	int dist(int x, int y) {
 		int k = lca(x, y);
 		return dpt[x] + dpt[y] - 2 * dpt[k];
@@ -71,9 +73,11 @@ public:
 private:
 	void dfs(int x, int p) {
 		pa[0][x] = p;
+		sz[x] = 1;
 		for (auto& g : e[x]) if (g != p) {
 			dpt[g] = dpt[x] + 1;
 			dfs(g, x);
+			sz[x] += sz[g];
 		}
 	}
 };

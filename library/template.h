@@ -1,11 +1,12 @@
 #pragma once
+#include <bits/stdc++.h>
 #include <immintrin.h>
 #pragma GCC target("avx2")
 #ifdef ONLINE_JUDGE
 //#pragma GCC target("O3")
 #endif
-#include<atcoder/all> 
-using atcoder::two_sat, atcoder::mcf_graph, atcoder::mf_graph;
+//#include<atcoder/all> 
+//using atcoder::two_sat, atcoder::mcf_graph, atcoder::mf_graph;
 using ll = long long;
 using ld = long double;
 using pi = pair<int, int>;
@@ -24,7 +25,7 @@ using vl = vector<ll>;
 #define crdcomp(b) sort(all((b))); (b).erase(unique(all((b))), (b).end())
 #define getidx(b, i) (lower_bound(all((b)), (i))-(b).begin())
 #define found(a, x) (a.find(x)!=a.end())
-#define multi() int __testcase_num = read();while(__testcase_num--)
+#define multi(n) int __testcase_num = (n);while(__testcase_num--)
 #define ssp(i, n) ((i)==(n)-1 ? "\n" : " ")
 constexpr int mod = 998244353;
 constexpr int Mod = 1e9 + 7;

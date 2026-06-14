@@ -16,7 +16,7 @@
 #include "segtree/seg_max.h"
 #include "segtree/seg_prod.h"
 
-#include "graph/tree.h"
+#include "graph/tree/tree.h"
 #include "graph/namori_circuit.h"
 
 #include "data_structure/binary_trie_tree.h"

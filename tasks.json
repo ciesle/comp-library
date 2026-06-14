@@ -138,6 +138,27 @@
             }
         },
         {
+            "label": "run_with_copy",
+            "type": "shell",
+            "command": "wl-paste > in.txt && ./main < in.txt",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": [
+                "build_main",
+            ],
+            "dependsOrder": "sequence",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+                "group": "run",
+            }
+        },
+        {
             "label": "run_with_input_output",
             "type": "shell",
             "command": "./main",
@@ -227,7 +248,7 @@
         {
             "label": "make_intxt",
             "type": "shell",
-            "command": "xsel -bo > in.txt",
+            "command": "wl-paste > in.txt",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -242,27 +263,6 @@
                 "close": true
             }
         },
-        {
-            "label": "run_with_copy",
-            "type": "shell",
-            "command": "xsel -bo > in.txt && ./main < in.txt",
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "dependsOn": [
-                "build",
-            ],
-            "dependsOrder": "sequence",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false,
-                "group": "run",
-            }
-        }
     ],
     "inputs": [
         {

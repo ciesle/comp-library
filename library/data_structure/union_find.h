@@ -35,8 +35,8 @@ public:
     int groups() {
         return grps;
     }
-    H operator[](int x) {
+    pair<int, int> operator[](int x) {
         x = root(x);
-        return H{ x,-pa[x] };
+        return pair<int, int>{ x, -pa[x] };
     }
 };

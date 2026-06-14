@@ -16,7 +16,7 @@ template <typename T>
 void print_debug(const T& value, vector<int>hist = vector<int>(), int idx = -1, int indent = 0) {
 	if constexpr (is_vector<T>::value) {
 		int dept = preflight_debug(value);
-		if (idx == 0)  cerr << "\n";
+		if (idx == 0)  cerr << endl;
 		cerr << string(indent, ' ');
 		if (dept > 1 && ~idx) {
 			cerr << "(";
@@ -29,7 +29,7 @@ void print_debug(const T& value, vector<int>hist = vector<int>(), int idx = -1, 
 			hist.pop_back();
 		}
 		if (dept > 1) cerr << string(indent, ' ');
-		cerr << "]" << ((idx == 0 || idx == 1) ? "," : "") << "\n";
+		cerr << "]" << ((idx == 0 || idx == 1) ? "," : "") << endl;
 	}
 	else {
 		cerr << value << " ";
@@ -45,7 +45,7 @@ int preflight_debug(const T(&arr)[N]) {
 template <typename T, size_t N>
 void print_debug(const T(&arr)[N], vector<int>hist = vector<int>(), int idx = -1, int indent = 0) {
 	int dept = preflight_debug(arr);
-	if (idx == 0)  cerr << "\n";
+	if (idx == 0)  cerr << endl;
 	cerr << string(indent, ' ');
 	if (dept > 1 && ~idx) {
 		cerr << "(";
@@ -58,12 +58,12 @@ void print_debug(const T(&arr)[N], vector<int>hist = vector<int>(), int idx = -1
 		hist.pop_back();
 	}
 	if (dept > 1) cerr << string(indent, ' ');
-	cerr << "]" << ((idx == 0 || idx == 1) ? "," : "") << "\n";
+	cerr << "]" << ((idx == 0 || idx == 1) ? "," : "") << endl;
 }
 
 
 template <typename... Args>
 void debug(const Args... args) {
 	((print_debug(args), cerr << ' '), ...);
-	cerr << "\n";
+	cerr << endl;
 }
