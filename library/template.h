@@ -41,3 +41,16 @@ ll gcd(ll i, ll j) { return j ? gcd(j, i % j) : i; }
 template<typename T>void fin(T x) { cout << x << endl; exit(0); }
 # define likely(x)	__builtin_expect(!!(x), 1)
 # define unlikely(x)	__builtin_expect(!!(x), 0)
+template<typename itr> void printvec(itr begin, itr end) {
+	for (itr p = begin; p < end; p++){
+		if(p!=begin)cout<<" "; cout << *p;
+	}
+	cout << endl;
+}
+template <class T> T makevec(T value) {return value;}
+template <class T, class... Args,
+		std::enable_if_t<(sizeof...(Args) > 0), int> = 0>
+auto makevec(std::size_t n, Args... args) {
+	auto inner = makevec<T>(args...);
+	return std::vector<decltype(inner)>(n, inner);
+}
