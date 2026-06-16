@@ -1,9 +1,9 @@
 #pragma once
 #include <bits/stdc++.h>
 #include <immintrin.h>
-#pragma GCC target("avx2")
 #ifdef ONLINE_JUDGE
-//#pragma GCC target("O3")
+#pragma GCC target("O3")
+#pragma GCC target("avx2")
 #endif
 //#include<atcoder/all> 
 //using atcoder::two_sat, atcoder::mcf_graph, atcoder::mf_graph;

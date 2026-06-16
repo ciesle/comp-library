@@ -108,4 +108,5 @@
     },
     "C_Cpp.default.cppStandard": "gnu++23",
     "C_Cpp.intelliSenseEngine": "default",
+    "comp_workspace.keybindings.enabled": true,
 }
