@@ -1,0 +1,16 @@
+/*
+    - string
+        str.substr(int a, int b) : a文字目からb文字続く部分列 (b省略 -> a文字目から最後まで)
+        str.erase(int a, int b) : a文字目からb文字続く部分列を削除
+        str.insert(int a, string s) : strのa-1文字目とa文字目の間に文字列sを挿入
+
+    - vector
+        vec.insert(itr, component) : イテレータitrの位置に要素componentを挿入
+            ex) begin()+1なら0-indexedで1番目にcomponentが来るように挿入する
+        vec.erase(itr) : イテレータitrに対応する要素を削除 O(n)
+        vec.erase(itr1, itr2) : 区間[itr1,itr2) の要素を削除 O(n)
+
+    - array
+        array<int, 3> : 3要素のint型配列を定義 (固定長!)
+
+*/

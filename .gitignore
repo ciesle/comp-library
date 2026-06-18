@@ -1,3 +1,5 @@
 /include/atcoder
 snip
 *.env
+.DS_Store
+.DS_Store
