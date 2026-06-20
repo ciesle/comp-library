@@ -1,6 +1,6 @@
 #pragma once
 #include <bits/stdc++.h>
-#include "../template.h"
+#include "../../template.h"
 using namespace std;
 template<unsigned int mod>
 class mymodint {

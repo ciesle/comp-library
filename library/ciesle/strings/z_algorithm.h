@@ -1,3 +1,5 @@
+#include<bits/stdc++.h>
+using namespace std;
 vector<int>z_algorithm(string& s) {
 	int n = s.size();
 	int i = 1, j = 0;

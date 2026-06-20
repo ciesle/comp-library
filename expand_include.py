@@ -6,9 +6,14 @@ import sys
 def should_strip_header_line(line):
     """展開したヘッダから不要なトップレベル行を取り除く"""
     return bool(re.match(
-        r'^\s*(?:#\s*(?:pragma\s+once\b.*|include\s*<[^>]+>.*)|using\s+namespace\s+std\s*;.*)$',
+        r'^\s*(?:#\s*(?:pragma\s+once\b.*|include\s*<bits/stdc\+\+\.h>\s*.*)|using\s+namespace\s+std\s*;.*)$',
         line,
     ))
+
+def is_under_base_dir(path, base_dir):
+    abs_path = os.path.abspath(path)
+    abs_base_dir = os.path.abspath(base_dir)
+    return os.path.commonpath([abs_path, abs_base_dir]) == abs_base_dir
 
 def extract_library_headers_from_iwyu(iwyu_text):
     """IWYU出力から必要な library/ 以下のヘッダを抽出"""
@@ -78,10 +83,13 @@ def expand_includes(path, included_files, base_dir="library"):
             if m:
                 inc_path = m.group(1)
                 full_path = os.path.join(os.path.dirname(abs_path), inc_path)
-                expanded = expand_includes(full_path, included_files, base_dir)
-                result_lines.append(f"// >>> begin include: {inc_path}\n")
-                result_lines.append(expanded)
-                result_lines.append(f"// <<< end include: {inc_path}\n")
+                if is_under_base_dir(full_path, base_dir):
+                    expanded = expand_includes(full_path, included_files, base_dir)
+                    result_lines.append(f"// >>> begin include: {inc_path}\n")
+                    result_lines.append(expanded)
+                    result_lines.append(f"// <<< end include: {inc_path}\n")
+                else:
+                    result_lines.append(line)
             elif not should_strip_header_line(line):
                 result_lines.append(line)
 

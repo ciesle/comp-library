@@ -5,8 +5,6 @@
 //#pragma GCC target("O3")
 //#pragma GCC target("avx2")
 #endif
-#include<atcoder/all> 
-using atcoder::two_sat, atcoder::mcf_graph, atcoder::mf_graph;
 using ll = long long;
 using ld = long double;
 using pi = pair<int, int>;
