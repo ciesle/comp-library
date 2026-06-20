@@ -36,3 +36,4 @@
 #include "utils/bit.h"
 #include "utils/array.h"
 #include "utils/cumulative_sum.h"
+#include "utils/multivec.h"
