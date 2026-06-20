@@ -22,24 +22,23 @@ public:
 			if (i + (i & -i) <= size) dat[i + (i & -i)] += dat[i];
 		}
 	}
-	void add(int i, long long x) {
+	void add(int i, T x) {
 		i++;
 		while (i <= size) {
 			dat[i] += x;
 			i += i & -i;
 		}
 	}
-	void change(int i, long long x) {
-		i++; int t = x - dat[i];
+	void change(int i, T x) {
+		T t = x - query(i, i + 1);
+		i++;
 		while (i <= size) {
-			int k = dat[i];
 			dat[i] += t;
-			t = dat[i] - k;
 			i += i & -i;
 		}
 	}
 	//[l,r)
-	void add(int l, int r, long long x) {
+	void add(int l, int r, T x) {
 		add(l, x); add(r, -x);
 	}
 	//[0,i]

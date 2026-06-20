@@ -7,6 +7,11 @@ template <typename T, typename A>
 struct is_vector<std::vector<T, A>> : std::true_type {};
 
 template <typename T>
+struct is_pair : std::false_type {};
+template <typename T, typename U>
+struct is_pair<std::pair<T, U>> : std::true_type {};
+
+template <typename T>
 int preflight_debug(const T& value) {
 	int ret = 0;
 	if constexpr (is_vector<T>::value) ret = preflight_debug(value[0]) + 1;
@@ -30,6 +35,10 @@ void print_debug(const T& value, vector<int>hist = vector<int>(), int idx = -1, 
 		}
 		if (dept > 1) cerr << string(indent, ' ');
 		cerr << "]" << ((idx == 0 || idx == 1) ? "," : "") << endl;
+	}
+	else if constexpr (is_pair<T>::value) {
+		cerr << "{ first: " << value.first
+			 << ", second: " << value.second << "} ";
 	}
 	else {
 		cerr << value << " ";
