@@ -12,9 +12,19 @@ template <typename T, typename U>
 struct is_pair<std::pair<T, U>> : std::true_type {};
 
 template <typename T>
+struct is_map : std::false_type {};
+template <typename K, typename V, typename C, typename A>
+struct is_map<std::map<K, V, C, A>> : std::true_type {};
+
+template <typename T>
+struct is_set : std::false_type {};
+template <typename K, typename C, typename A>
+struct is_set<std::set<K, C, A>> : std::true_type {};
+
+template <typename T>
 int preflight_debug(const T& value) {
 	int ret = 0;
-	if constexpr (is_vector<T>::value) ret = preflight_debug(value[0]) + 1;
+	if constexpr (is_vector<T>::value) ret = value.empty() ? 1 : preflight_debug(value[0]) + 1;
 	return ret;
 }
 template <typename T>
@@ -37,8 +47,29 @@ void print_debug(const T& value, vector<int>hist = vector<int>(), int idx = -1, 
 		cerr << "]" << ((idx == 0 || idx == 1) ? "," : "") << endl;
 	}
 	else if constexpr (is_pair<T>::value) {
-		cerr << "{ first: " << value.first
-			 << ", second: " << value.second << "} ";
+		cerr << "{ first: ";
+		print_debug(value.first);
+		cerr << "second: ";
+		print_debug(value.second);
+		cerr << "} ";
+	}
+	else if constexpr (is_map<T>::value) {
+		cerr << "{ ";
+		for (auto itr = value.begin(); itr != value.end(); ++itr) {
+			if (itr != value.begin()) cerr << ", ";
+			print_debug(itr->first);
+			cerr << ": ";
+			print_debug(itr->second);
+		}
+		cerr << "} ";
+	}
+	else if constexpr (is_set<T>::value) {
+		cerr << "{ ";
+		for (auto itr = value.begin(); itr != value.end(); ++itr) {
+			if (itr != value.begin()) cerr << ", ";
+			print_debug(*itr);
+		}
+		cerr << "} ";
 	}
 	else {
 		cerr << value << " ";

@@ -28,6 +28,7 @@
 #include "math/matrix.h"
 #include "math/modint.h"
 #include "math/modpow.h"
+#include "math/lucas.h"
 
 #include "tools/measure.h"
 #include "tools/debug.h"
