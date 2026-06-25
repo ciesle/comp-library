@@ -1,3 +1,4 @@
+
 template <typename Graph>
 struct HeavyLightDecomposition{
 private:
@@ -67,9 +68,7 @@ public:
 	
 		template<typename F>
 		void path_query(int u,int v,bool vertex,const F& f){
-			// 頂点[u,v]のパスに対するクエリ
-            // vertex=trueの場合頂点属性，falseの場合辺属性
-            int l=lca(u,v);
+			int l=lca(u,v);
 			for(auto [l,r]:ascend(u,l)){
 				int s=l+1,t=r;
 				s>t?f(t,s):f(s,t);
