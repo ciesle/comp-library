@@ -28,6 +28,7 @@
 #include "math/matrix.h"
 #include "math/modint.h"
 #include "math/modpow.h"
+#include "math/lucas.h"
 
 #include "tools/measure.h"
 #include "tools/debug.h"
@@ -35,3 +36,5 @@
 #include "utils/sorted_index.h"
 #include "utils/bit.h"
 #include "utils/array.h"
+#include "utils/cumulative_sum.h"
+#include "utils/multivec.h"
