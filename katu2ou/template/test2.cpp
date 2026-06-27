@@ -1,64 +1,64 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define rep2(i, m, n) for (int i = (m); i < (n); ++i)
+#define rep(i, n) rep2(i, 0, n)
+#define drep2(i, m, n) for (int i = (m)-1; i >= (n); --i)
+#define drep(i, n) drep2(i, n, 0)
+#define all(...) std::begin(__VA_ARGS__), std::end(__VA_ARGS__)
+#define INF (long long)1001001001001001001
+#define inf 1001001000
+#define fi first
+#define se second
+#define PB push_back
+
+using ll = long long;
+using ld = long double;
+using vi = vector<int>;
+using vvi = vector<vector<int>>;
+using vl = vector<long long>;
+using vvl = vector<vector<long long>>;
+using pii = pair<int, int>;
+using pll = pair<long long, long long>;
+using vpii = vector<pair<int,int>>;
+using vpll = vector<pair<long long, long long>>;
+using LL = __int128_t;
+
+ll gcd(ll x, ll y) {if (x == 0) return y;	return gcd(y%x, x);} 
+ll lcm(ll x, ll y) { __int128_t xx,yy; xx=x; yy=y; __int128_t ans=xx * yy / gcd(x, y); ll ans2=ans; return ans2; }
+template<typename T>
+T POW(T x, ll n){T ret=1;	while(n>0){		if(n&1) ret=ret*x;		x=x*x;		n>>=1;	}	return ret;}
+template<typename T>
+T modpow(T a, ll n, T p) {	if(n==0) return (T)1;  if (n == 1) return a % p;  if (n % 2 == 1) return (a * modpow(a, n - 1, p)) % p;  T t = modpow(a, n / 2, p);  return (t * t) % p;}
+template<typename T>
+T modinv(T a, T m) {	if(m==0)return (T)1;	T b = m, u = 1, v = 0;	while (b) {		T t = a / b;		a -= t * b; swap(a, b);		u -= t * v; swap(u, v);	}	u %= m;	if (u < 0) u += m;	return u;}
+ll REM(ll a, ll b){ return (a % b + b) % b;}
+ll QUO(ll a, ll b){ return (a - REM(a, b)) / b;}
+struct RNG {
+    std::mt19937_64 eng;      
+    RNG() : eng(std::random_device{}()) {}   
+    /// [0, n] の一様乱数を返す
+    long long random_uniform(long long a, long long b) {
+        std::uniform_int_distribution<long long> dist(a, b);
+        return dist(eng);
+    }
+};
 /*
-  <Math>
-    -
-
-    [実装/関数]
-        - mf_graph<Cap> graph(int n) : n頂点0辺のグラフを作る(Capは容量の型)
-            - Capはint or ll
-        - int graph.add_edge(int from, int to, Cap cap)
-            : fromからtoへ最大容量cap,流量0の辺を追加し，何番目に追加された辺か返す．
-            (0 <= cap)
-        - Cap graph.flow(int s, int t)
-            : sからtへ流せるだけ流し，流せた量を返す．
-        - Cap graph.flow(int s, int t, Cap flow_limit)
-            : sからtへ流量flow_limitに達するまで流せるだけ流し，流せた量を返す．
-            (s\neq t)
-        - vector<bool> graph.min_cut(int s)
-            : 長さnのvectorを返す．i番目の要素には，頂点sからiへ残余グラフで到達可能な時
-            のみtrueを返す．
-        - struct edge<Cap,Cost>::edge {
-            int from, to;
-            Cap cap, flow;
-        };
-            - mf_graph<Cap>::edge graph.get_edge(int i)
-            - vector<mf_graph<Cap>::edge> graph.edges()
-                : 今の内部の辺の状態を返す(辺を追加した順)
-        - void graph.change_edge(int i, Cap new_cap, Cap new_flow) 
-            : i番目に追加された辺の容量,流量を変更する．
-
-        - struct residual_edge {
-                int to;
-                Cap cap;
-            };
-        - vector<vector<residual_edge>> graph.residual_graph()
-            : 現在の残余グラフを返す．
-              返り値の[v]には，残余グラフにおいてvから出る辺が入る．
-              各辺eについて，
-                - e.to   : 行き先
-                - e.cap  : 残余容量
-              を表す．
-              残余容量が正の辺のみを返す．
-
-
-    [計算時間]
-        - add_edge : ならしO(1)
-        - flow :  辺の容量が全て1ならO(min(n^{2/3}m, m^{3/2}))
-                  一般にはO(n^2m)
-        - min_cut : O(n+m)
-
-    [備考]
-        
-
-    [参照]
-        -
-
-    [verified at]
-        -
-
-    [使用例]
-
-
+auto start = chrono::steady_clock::now(); //時間計測の開始
+auto now = std::chrono::steady_clock::now(); //現在時刻と開始時刻の差を測定
+double elapsed = std::chrono::duration<double>(now - start).count(); //時間をdouble型で取得
 */
+/*
+const int MAXCOMB=510000;
+std::vector<mint> FAC(MAXCOMB), FINV(MAXCOMB), INV(MAXCOMB);
+void COMinit() {FAC[0] = FAC[1] = 1;FINV[0] = FINV[1] = 1;INV[1] = 1;for (int i = 2; i < MAXCOMB; i++) {FAC[i] = FAC[i - 1] * i;INV[i] = mint(0) - INV[mint::mod() % i] * (mint::mod() / i);FINV[i] = FINV[i - 1] * INV[i];}}
+mint COM(int n, int k) {if (n < k) return 0;if (n < 0 || k < 0) return 0;return FAC[n] * FINV[k] * FINV[n - k];}
+*/
+
+template <typename T> inline bool chmax(T &a, T b) { return ((a < b) ? (a = b, true) : (false));}
+template <typename T> inline bool chmin(T &a, T b) { return ((a > b) ? (a = b, true) : (false));}
+
+
 
 namespace internal {
 
@@ -233,3 +233,24 @@ template <class Cap> struct mf_graph {
     std::vector<std::pair<int, int>> pos;
     std::vector<std::vector<_edge>> g;
 };
+
+void solve(){
+    mf_graph<int> g(4);
+    g.add_edge(0, 1, 2);
+    g.add_edge(0, 2, 3);
+    g.add_edge(2, 3, 1);
+    g.flow(0, 3);
+    auto G = g.residual_graph();
+    rep(i,4){
+        for(auto pr:G[i]){
+            cout << i << " " << pr.to << " " << pr.cost << endl;
+        }
+    }
+}
+
+signed main(){
+	cin.tie(0);
+	ios::sync_with_stdio(0);
+	cout<<fixed<<setprecision(20);
+        solve();
+}

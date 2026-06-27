@@ -1,15 +1,135 @@
 /*
--   線形回帰数列(u_{n+p}=a_0u_n + ... + a_{p-1}u_{n+p-1} : p階の線形回帰数列)
-    この前k項が与えられた時に第n項をO(k^2+klogklogn)で計算できる
-    
-    - (a_i)の母関数は，\sum_{i=0}^{\infty} a_i x^i = P(x)/(1-c_1x-c_2x^2-...-c_kx^k)
-    と表せる．ここで，P(x)とc_1,...,c_kを求めるのがBerulekamp-massey アルゴリズム
-    - Bostan-mori アルゴリズムは，分子分母が高々k次の多項式で表される分数P(x)/Q(x)に対し，[x^n]P(x)/Q(x)
-    を求める．
+  <Berlekamp-Massey / Bostan-Mori による線形漸化式の第 N 項計算>
 
-    - Bostan-Mori が必要
+    - 線形漸化式で表される数列の第 N 項を高速に求めるためのライブラリ
 
-        - nth_term(N,a) : vector<mint>型数列(a)の第N項を計算する
+    - 数列 a_0, a_1, a_2, ... が，ある k に対して
+
+          a_{n+k} = c_1 a_{n+k-1} + c_2 a_{n+k-2} + ... + c_k a_n
+
+      の形の線形漸化式を満たすとき，先頭の十分な項から最小線形漸化式を推定し，
+      その漸化式を用いて第 N 項を計算する．
+
+    - 主に次の 2 段階からなる．
+
+        1. Berlekamp-Massey
+            - 与えられた数列 s から，それを生成する最小線形漸化式を求める
+            - 返り値は特性多項式 Q(x) に対応する
+
+        2. Bostan-Mori
+            - 有理型母関数 P(x) / Q(x) に対して，[x^N] P(x) / Q(x) を高速に求める
+            - 線形漸化式の第 N 項計算に対応する
+
+    [母関数との関係]
+        - 線形漸化式を満たす数列 a_n の母関数は
+
+              A(x) = Σ_{n>=0} a_n x^n = P(x) / Q(x)
+
+          の形に書ける．
+
+        - ここで Q(x) は漸化式から定まる多項式で，
+
+              Q(x) = 1 - c_1 x - c_2 x^2 - ... - c_k x^k
+
+          の形になる．
+
+        - Berlekamp-Massey は，与えられた数列からこの Q(x) を求める．
+        - Bostan-Mori は，P(x), Q(x) から [x^N] P(x)/Q(x) を求める．
+
+    [実装/関数]
+        - vector<mint> BerlekampMassey(vector<mint> s)
+            数列 s から最小線形漸化式の特性多項式 Q(x) を求める．
+
+            返り値 bm は，FormalPowerSeries として使うことを想定しており，
+            bm[0] = 1 となる形の多項式である．
+
+        - mint LinearRecurrence(long long k, FormalPowerSeries<mint> Q,
+                                FormalPowerSeries<mint> P)
+            有理型母関数 P(x) / Q(x) の x^k の係数を求める．
+
+            つまり，
+
+                [x^k] P(x) / Q(x)
+
+            を返す．
+
+            内部では Bostan-Mori を用いる．
+            NTT が使える場合は高速な分岐を用い，そうでない場合も通常の多項式積で動作する．
+
+        - mint kitamasa(long long N, FormalPowerSeries<mint> Q,
+                        FormalPowerSeries<mint> a)
+            特性多項式 Q(x) と初期項 a から，数列の第 N 項を求める．
+
+            名前は kitamasa だが，内部では母関数 P(x)/Q(x) を作り，
+            LinearRecurrence に渡している．
+
+        - mint nth_term(long long n, vector<mint> s)
+            数列 s の先頭項から Berlekamp-Massey で線形漸化式を推定し，
+            第 n 項を返す．
+
+            使う側は基本的にこの関数を呼べばよい．
+
+    [計算時間]
+        - BerlekampMassey
+            O(L^2)
+            ここで L = s.size()
+
+        - LinearRecurrence / Bostan-Mori
+            多項式の次数を k として，おおよそ
+
+                O(M(k) log N)
+
+            ここで M(k) は k 次程度の多項式積の計算時間．
+            NTT が使える場合は高速．
+
+        - nth_term
+            s.size() = L，最小漸化式の次数を k とすると，
+
+                O(L^2 + M(k) log N)
+
+    [要件]
+        - mint は四則演算，逆元，pow などを持つ modint 型であること
+        - FormalPowerSeries<mint> が定義されていること
+        - FormalPowerSeries が以下の操作に対応していること
+            - +, -, *, /, inv()
+            - resize()
+            - shrink()
+            - pre()
+            - ntt(), intt()
+            - ntt_doubling()
+            - set_fft()
+            - ntt_ptr
+            - ntt_pr()
+
+    [備考]
+        - nth_term(n, s) に渡す s は，線形漸化式を推定するために十分な長さが必要．
+          一般には，最小漸化式の次数を k とすると 2k 項程度あるとよい．
+
+        - s が短すぎる場合，Berlekamp-Massey が本来の漸化式より低い次数の式を推定することがある．
+
+        - n は 0-indexed．
+          つまり nth_term(0, s) は a_0 を返す．
+
+        - 典型的な用途:
+            - フィボナッチ数列の第 N 項
+            - 線形 DP の第 N 項
+            - 遷移行列の累乗で表される数列
+            - 畳み込みや Kitamasa 法で扱う線形漸化式
+
+        - Berlekamp-Massey は，有限体上での使用を想定している．
+          mod が素数の modint で使うのが自然．
+
+        - Bostan Moriが必要
+
+    [verified at]
+        -
+
+    [使用例]
+        // Fibonacci:
+        // a_0 = 0, a_1 = 1, a_n = a_{n-1} + a_{n-2}
+
+        vector<mint> s = {0, 1, 1, 2, 3, 5, 8, 13};
+        cout << nth_term<mint>(N, s) << endl;
 */
 
 template <typename mint>

@@ -32,6 +32,118 @@
 
 [計算量]
     - おおよそ O((N + Q) sqrt(N) * add の計算量)
+
+[例]
+    - 各クエリ [l,r) に対して、辺 edges[l], ..., edges[r-1] を使ったときの連結成分数を求める
+    辺削除はしにくいのでmoは大変
+    
+struct RollbackUnionFind {
+    vector<int> data;
+    vector<tuple<int, int, int>> history;
+    vector<int> snapshots;
+    int components;
+
+    RollbackUnionFind(int n = 0) {
+        init(n);
+    }
+
+    void init(int n) {
+        data.assign(n, -1);
+        history.clear();
+        snapshots.clear();
+        components = n;
+    }
+
+    int find(int x) {
+        while (data[x] >= 0) x = data[x];
+        return x;
+    }
+
+    bool unite(int x, int y) {
+        x = find(x);
+        y = find(y);
+
+        history.push_back({x, data[x], components});
+        history.push_back({y, data[y], components});
+
+        if (x == y) return false;
+
+        if (data[x] > data[y]) swap(x, y);
+
+        data[x] += data[y];
+        data[y] = x;
+        components--;
+
+        return true;
+    }
+
+    void snapshot() {
+        snapshots.push_back((int)history.size());
+    }
+
+    void rollback() {
+        int snap = snapshots.back();
+        snapshots.pop_back();
+
+        while ((int)history.size() > snap) {
+            auto [v, old_data, old_components] = history.back();
+            history.pop_back();
+
+            data[v] = old_data;
+            components = old_components;
+        }
+    }
+};
+
+    int V, M, Q;
+cin >> V >> M >> Q;
+
+vector<pair<int, int>> edges(M);
+
+for (int i = 0; i < M; i++) {
+    int u, v;
+    cin >> u >> v;
+    edges[i] = {u, v};
+}
+
+MoRollBack mo(M, Q);
+
+vector<int> L(Q), R(Q);
+for (int q = 0; q < Q; q++) {
+    cin >> L[q] >> R[q];
+    mo.add_query(L[q], R[q]);
+}
+
+RollbackUnionFind uf(V);
+vector<int> ans(Q);
+
+auto add = [&](int i) {
+    auto [u, v] = edges[i];
+    uf.unite(u, v);
+};
+
+auto query = [&](int q) {
+    ans[q] = uf.components;
+};
+
+auto reset = [&]() {
+    uf.init(V);
+};
+
+auto snapshot = [&]() {
+    uf.snapshot();
+};
+
+auto rollback = [&]() {
+    uf.rollback();
+};
+
+mo.run(add, query, reset, snapshot, rollback);
+
+for (int q = 0; q < Q; q++) {
+    cout << ans[q] << '\n';
+}
+
 */
 
 struct MoRollBack {

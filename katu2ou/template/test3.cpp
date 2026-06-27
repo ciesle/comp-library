@@ -58,6 +58,7 @@ mint COM(int n, int k) {if (n < k) return 0;if (n < 0 || k < 0) return 0;return 
 template <typename T> inline bool chmax(T &a, T b) { return ((a < b) ? (a = b, true) : (false));}
 template <typename T> inline bool chmin(T &a, T b) { return ((a > b) ? (a = b, true) : (false));}
 
+
 template <uint32_t mod>
 struct LazyMontgomeryModInt {
   using mint = LazyMontgomeryModInt;
@@ -824,16 +825,179 @@ using fps = FormalPowerSeries<mint>;
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-int SOLVEFIN = 0;
+template <typename T>
+std::pair<int, T> GaussElimination(vector<vector<T>> &a, int pivot_end = -1,
+                                   bool diagonalize = false) {
+  if (a.empty()) return {0, 1};
+  int H = a.size(), W = a[0].size(), rank = 0;
+  if (pivot_end == -1) pivot_end = W;
+  T det = 1;
+  for (int j = 0; j < pivot_end; j++) {
+    int idx = -1;
+    for (int i = rank; i < H; i++) {
+      if (a[i][j] != T(0)) {
+        idx = i;
+        break;
+      }
+    }
+    if (idx == -1) {
+      det = 0;
+      continue;
+    }
+    if (rank != idx) det = -det, swap(a[rank], a[idx]);
+    det *= a[rank][j];
+    if (diagonalize && a[rank][j] != T(1)) {
+      T coeff = T(1) / a[rank][j];
+      for (int k = j; k < W; k++) a[rank][k] *= coeff;
+    }
+    int is = diagonalize ? 0 : rank + 1;
+    for (int i = is; i < H; i++) {
+      if (i == rank) continue;
+      if (a[i][j] != T(0)) {
+        T coeff = a[i][j] / a[rank][j];
+        for (int k = j; k < W; k++) a[i][k] -= a[rank][k] * coeff;
+      }
+    }
+    rank++;
+  }
+  return make_pair(rank, det);
+}
+
+
+unsigned int randInt() {
+        static unsigned int tx = 123456789, ty = 362436069, tz = 521288629, tw = 88675123;
+        unsigned int tt = (tx ^ (tx << 11));
+        tx = ty; ty = tz; tz = tw;
+        return (tw = (tw ^ (tw >> 19)) ^ (tt ^ (tt >> 8)));
+}
 
 void solve(){
+    int n, m;
+    cin >> n >> m;
+    vvi G(n + m);
+    vvi adj(n);
+    rep(i,m){
+        int k;
+        cin >> k;
+        rep(j,k){
+            int a;
+            cin >> a;
+            G[a-1].PB(n + i);
+            G[n + i].PB(a - 1);
+
+            adj[a - 1].PB(n + i);
+        }
+    }
+
+     //cout << "A" << endl;
+ 
+    vi erasedL(n);
+    vi erasedR(n+m);
+    queue<int> que;
+    int ans = 0;
+    rep(i, n) {
+        if(adj[i].size()==0){
+            ans++;
+            erasedL[i] = 1;
+        }
+        if(adj[i].size()==1){
+            que.push(i);
+        }
+    }
+
+    /*
     
+    10 10
+1 3
+1 4
+2 4 5
+3 4 1 9
+2 5 8
+1 6
+1 9
+1 10
+2 5 9
+5 1 2 3 4 5
+
+    */
+
+    while(que.size()){
+        int now = que.front();
+        que.pop();
+        //cout << now << endl;
+        if (erasedL[now] == 1) {
+            continue;
+        }
+        int to = adj[now][0];
+        ans++;
+        for (int v : G[to]) {
+            erasedL[v] = 1;
+            adj[v].clear();
+            // if (erasedL[v] == 1 || adj[v].size() == 0)
+            //     continue;
+            // else if(adj[v].size()==1){
+            //     adj[v].clear();
+            //     erasedL[v] = 1;
+            // }
+            // else{
+            //     if(adj[v][0]==to){
+            //         adj[v] = {adj[v][1]};
+            //     }
+            //     else{
+            //         adj[v] = {adj[v][0]};
+            //     }
+            //     que.push(v);
+            // }
+        }
+        erasedR[to] = 1;
+    }
+
+   
+
+    vvi nG(n+m);
+    vvi G2(m);
+    rep(i, n) {
+        if(adj[i].size()==2 && erasedL[i]==0
+     && erasedR[adj[i][0]]==0 && erasedR[adj[i][1]]==0){
+            G2[adj[i][0] - n].PB(adj[i][1] - n);
+            G2[adj[i][1] - n].PB(adj[i][0] - n);
+        }
+    }
+    
+    vector<vector<mint>> tutte(m, vector<mint>(m,0));
+    ll p = 998244353;
+
+    rep(i, m) {
+        for(int to:G2[i]){
+            if(i<to){
+                tutte[i][to] = randInt()%p;
+                tutte[to][i] = -tutte[i][to];
+            }
+            else{
+                tutte[to][i] = randInt()%p;
+                tutte[i][to] = -tutte[to][i];
+            }
+        }
+    }
+
+    // rep(i,m){
+    //     rep(j,m){
+    //         cout << tutte[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
+
+    auto rank = GaussElimination(tutte);
+    //cout << rank.fi << endl;
+    ans += rank.fi / 2;
+    cout << ans << endl;
+
+    //G2の一般マッチングを求めれば良い！！
 }
 
 signed main(){
 	cin.tie(0);
 	ios::sync_with_stdio(0);
 	cout<<fixed<<setprecision(20);
-	while(SOLVEFIN == 0) solve();
+	solve();
 }
