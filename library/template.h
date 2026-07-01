@@ -2,7 +2,7 @@
 #include <bits/stdc++.h>
 #include <immintrin.h>
 #ifdef ONLINE_JUDGE
-//#pragma GCC target("O3")
+//#pragma GCC optimize("O3")
 //#pragma GCC target("avx2")
 #endif
 using ll = long long;
