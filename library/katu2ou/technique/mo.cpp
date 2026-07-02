@@ -24,6 +24,37 @@
 - 要素の追加や削除が非可換な場合があるが, その時は 
  build(add_left, add_right, erase_left, erase_right, out) を呼び出すこと.
 
+ 
+ // ex) 長さNの数列{ai}(ai<=10^6)が与えられた時、[lj,rj]に含まれる値の種類数を答える(1<=j<=Q)
+// int main() {
+//   int N;
+//   cin >> N;
+//   vector< int > A(N);
+//   for(auto &a: A) cin >> a;
+//   int Q;
+//   cin >> Q;
+//   Mo mo(N); //呼び出し
+//   for(int i = 0; i < Q; i++) {
+//     int a, b;
+//     cin >> a >> b;
+//     mo.add(a - 1, b); //クエリに対応する区間[k,l)(半閉区間!)をaddする
+//   }
+//   vector< int > cnt(1000001), ans(Q); //操作に関与する変数はmainで定義 moにも渡さなくて良い
+//   int sum = 0;
+
+//   auto add = [&](int i) { // i番目の要素が加わる時に、どのような操作をするか(cnt,sumは現在の状態として持っておく)
+//     if(cnt[A[i]]++ == 0) ++sum;
+//   };
+//   auto erase = [&](int i) { //i番目の要素が外される時に...
+//     if(--cnt[A[i]] == 0) --sum;
+//   };
+//   auto out = [&](int q) { //これがq番目のクエリの答えになる(ansとして出力)
+//     ans[q] = sum;
+//   };
+
+//   mo.build(add, erase, out); // buildで解く
+//   for(auto &p: ans) cout << p << "\n";
+// }
 */
 struct Mo {
   int n;
@@ -62,33 +93,3 @@ struct Mo {
   }
 };
 
-// ex) 長さNの数列{ai}(ai<=10^6)が与えられた時、[lj,rj]に含まれる値の種類数を答える(1<=j<=Q)
-// int main() {
-//   int N;
-//   cin >> N;
-//   vector< int > A(N);
-//   for(auto &a: A) cin >> a;
-//   int Q;
-//   cin >> Q;
-//   Mo mo(N); //呼び出し
-//   for(int i = 0; i < Q; i++) {
-//     int a, b;
-//     cin >> a >> b;
-//     mo.add(a - 1, b); //クエリに対応する区間[k,l)(半閉区間!)をaddする
-//   }
-//   vector< int > cnt(1000001), ans(Q); //操作に関与する変数はmainで定義 moにも渡さなくて良い
-//   int sum = 0;
-
-//   auto add = [&](int i) { // i番目の要素が加わる時に、どのような操作をするか(cnt,sumは現在の状態として持っておく)
-//     if(cnt[A[i]]++ == 0) ++sum;
-//   };
-//   auto erase = [&](int i) { //i番目の要素が外される時に...
-//     if(--cnt[A[i]] == 0) --sum;
-//   };
-//   auto out = [&](int q) { //これがq番目のクエリの答えになる(ansとして出力)
-//     ans[q] = sum;
-//   };
-
-//   mo.build(add, erase, out); // buildで解く
-//   for(auto &p: ans) cout << p << "\n";
-// }

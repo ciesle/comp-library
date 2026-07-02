@@ -1,97 +1,114 @@
 /*
-  <ゼータ変換 メビウス変換>
-    - ゼータ変換とメビウス変換はposet上の関数に対して定義される．畳み込みを定めるには束である
-        必要がある(つまり，posetであって任意の二元a,bに対しa以上かつb以上の元の最小元と
-        a以下かつb以下の元の最大限が存在してほしい)
-        - 参照: https://qiita.com/convexineq/items/afc84dfb9ee4ec4a67d5m
+  <ゼータ変換・メビウス変換>
 
-    -
+    - bitmask で表された集合族上の関数に対するゼータ変換・メビウス変換を行う
+    - 長さ 2^n の配列 A を，集合 S ⊆ {0,1,...,n-1} 上の関数 A[S] とみなす
+        - 整数 mask の i bit 目が 1 ⇔ 集合に i が含まれる
+
+    [概要]
+        - 下位集合ゼータ変換
+            F[S] = Σ_{T ⊆ S} A[T]
+
+        - 上位集合ゼータ変換
+            F[S] = Σ_{S ⊆ T} A[T]
+
+        - メビウス変換は，対応するゼータ変換の逆変換である
 
     [実装/関数]
-        - void zt_des(vector<T> A, int n) : 
-            長さ2^n以上の配列Aに対して，A[i]を(iの部分集合jに対するA[j]の和)に変更する
+        - void zt_des(vector<T>& A, int n)
+            下位集合ゼータ変換を行う
+            A[S] <- Σ_{T ⊆ S} A[T]
 
-        - void zt_asc(vector<T> A, int n) : 
-            長さ2^n以上の配列Aに対して，A[i]を(iを含む集合jに対するA[j]の和)に変更する
+        - void mb_des(vector<T>& A, int n)
+            下位集合メビウス変換を行う
+            zt_des の逆変換
+            zt_des 後の配列に適用すると元に戻る
 
-        - void mb_asc(vector<A>, int n) : 
-            
-    
+        - void zt_asc(vector<T>& A, int n)
+            上位集合ゼータ変換を行う
+            A[S] <- Σ_{S ⊆ T} A[T]
+
+        - void mb_asc(vector<T>& A, int n)
+            上位集合メビウス変換を行う
+            zt_asc の逆変換
+            zt_asc 後の配列に適用すると元に戻る
+
     [計算時間]
-        - ゼータ変換/メビウス変換 : O(2^n*n)
-    
+        - 各変換 O(n 2^n)
+
+    [要件]
+        - A.size() >= 2^n
+        - T は +=, -= を持つ型
+            例: int, long long, modint など
+
     [備考]
-        -
-    
-    [参照]
-        - 
+        - 配列 A は破壊的に変更される
+        - 先頭 2^n 要素のみを処理する
+        - des は descending / down-set, asc は ascending / up-set の意味
+        - OR 畳み込み，AND 畳み込み，高速包除原理などでよく使う
 
     [verified at]
-        - 
-        
+        -
 */
 
-// bの下位集合全体の和
 template <typename T>
 void zt_des(vector<T> &A, int n) {
-    int An = A.size();
-    for(int i=0;i<n;i++){ //各次元に対しての更新
-        for(int j=0;j<An;j++){ //各要素を見る
-            if(j & (1LL<<i)) A[j] += A[j^(1LL<<i)];
+    // A[S] <- Σ_{T ⊆ S} A[T]
+    int N = 1 << n;
+    assert((int)A.size() >= N);
+
+    for (int i = 0; i < n; i++) {
+        for (int S = 0; S < N; S++) {
+            if (S & (1 << i)) {
+                A[S] += A[S ^ (1 << i)];
+            }
         }
-    }    
-    return;
+    }
 }
 
-// bの上位集合全体の和
+template <typename T>
+void mb_des(vector<T> &A, int n) {
+    // A[S] <- Σ_{T ⊆ S} μ(T,S) A[T]
+    // zt_des の逆変換
+    int N = 1 << n;
+    assert((int)A.size() >= N);
+
+    for (int i = 0; i < n; i++) {
+        for (int S = 0; S < N; S++) {
+            if (S & (1 << i)) {
+                A[S] -= A[S ^ (1 << i)];
+            }
+        }
+    }
+}
+
 template <typename T>
 void zt_asc(vector<T> &A, int n) {
-    int An = A.size();
-    for(int i=0;i<n;i++){
-        for(int j=0;j<An;j++){
-            if(j & (1LL<<i)) A[j^(1LL<<i)] += A[j];
+    // A[S] <- Σ_{S ⊆ T} A[T]
+    int N = 1 << n;
+    assert((int)A.size() >= N);
+
+    for (int i = 0; i < n; i++) {
+        for (int S = 0; S < N; S++) {
+            if (S & (1 << i)) {
+                A[S ^ (1 << i)] += A[S];
+            }
         }
-    }    
-    return;
+    }
 }
 
 template <typename T>
 void mb_asc(vector<T> &A, int n) {
-    int An = A.size();
-    for(int i=0;i<n;i++){
-        for(int j=0;j<An;j++){
-            if(j & (1LL<<i)) A[j^(1LL<<i)] -= A[j];
+    // A[S] <- Σ_{S ⊆ T} μ(S,T) A[T]
+    // zt_asc の逆変換
+    int N = 1 << n;
+    assert((int)A.size() >= N);
+
+    for (int i = 0; i < n; i++) {
+        for (int S = 0; S < N; S++) {
+            if (S & (1 << i)) {
+                A[S ^ (1 << i)] -= A[S];
+            }
         }
-    }    
-    return;
+    }
 }
-
-
-/*
-    2. 約数包除
-        - 長さnの配列A(=(A[1],...,A[n]))に対して，bの倍数であるi(bの上位...)に対するA[i]の総和と，
-            bの約数であるjに対するA[j]の総和を計算する
-*/ 
-
-
-/*
-    3. min,maxでの畳み込み
-        - 半順序集合(Poset)上の(ある環への)関数に対して，Pのmin(or max)と積による畳み込みを考える
-            つまり， h(k) = \sum_{min(i,j)=k} f(i)*g(j) (0<=i,j<n) を求めたい．
-            このとき，各点積として ζh = ζf * ζg が成り立つ．
-              -> このような形に落とし込めば，畳み込みをゼータ変換・各点積とメビウス変換
-                により行うことができる(nlogn)
-            - (高速離散フーリエ変換では，畳み込みを求める上で多項式補完のアイデアを用いており，
-                変換する列のサイズ長が2冪の時に小さい2つの計算に帰着されることで高速化される)
-        
-        - 一般に，束上での^とvによる畳み込みに対しても，ζh = ζf * ζgの関係が成り立つ
-*/
-
-/*
-    4. gcdの畳み込み
-        - p_1,p_2,...を素数を小さい方から並べた列として，正の整数nに対して
-            n = (素因数p_1の個数, .... ) (=p(n))
-        とN^Nの元に対応させると(実際にはある整数mに対してN^mの元と解釈)，gcd,lcmは
-        対応先のN^mの元のmin,maxに対応する(つまり，gcd(x,y)=k <-> min(p(x),p(y))=p(k))
-        よって3の手法により高速な畳み込みができる
-*/

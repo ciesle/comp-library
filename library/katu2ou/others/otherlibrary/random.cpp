@@ -7,6 +7,19 @@
     正規分布など、一様でない乱数生成が面倒
 といった問題がある。
 (rand()は線形合同法によって乱数を生成している)
+
+    <構造体での使い方>
+    RNG rng;
+
+    long long x = rng.random_uniform(1, 6); // 1以上6以下の乱数
+    cout << x << endl;
+
+    <他>
+    uniform_real_distribution<double>(0.0, 1.0); 
+    bernoulli_distribution dist(0.3); p=0.3で1，他0
+    normal_distribution<double> dist(0.0, 1.0); 平均0，分散1
+
+
 */
 
 //高速で簡易的なrand

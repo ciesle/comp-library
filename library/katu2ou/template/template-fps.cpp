@@ -822,6 +822,8 @@ FormalPowerSeries<mint> FormalPowerSeries<mint>::exp(int deg) const {
 using mint = LazyMontgomeryModInt<998244353>;
 using fps = FormalPowerSeries<mint>;
 
+
+
 //////////////////////////////////////////////////////////////////////////////////////////
 int SOLVEFIN = 0;
 

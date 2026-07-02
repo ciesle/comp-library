@@ -231,10 +231,3 @@ struct RollingHash {
 
   int size() const { return s; }
 };
-
-template <typename Str, int BASE_NUM>
-typename RollingHash<Str, BASE_NUM>::Hash RollingHash<Str, BASE_NUM>::basis =
-    internal1::Hash<BASE_NUM>::get_basis();
-using roriha = RollingHash<string, 2>;
-
-
