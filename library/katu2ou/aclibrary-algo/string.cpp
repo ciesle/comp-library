@@ -22,7 +22,7 @@
          
                 
     [計算時間]
-        - suffix_array 順にO(n) / O(nlogn)timeO(n)space / O(n+upper)
+        - suffix_array 順にO(n) / O(nlogn) time O(n) space / O(n+upper)
         - lcp_array : O(n)
         - z_algorithm : O(n)
 

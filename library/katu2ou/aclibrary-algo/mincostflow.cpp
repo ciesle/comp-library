@@ -30,6 +30,21 @@
             - mcf_graph<Cap,Cost>::edge graph.get_edge(int i)
             - vector<mcf_graph<Cap,Cost>::edge> graph.edges()
                 : 今の内部の辺の状態を返す(辺を追加した順)
+        
+         - struct residual_edge {
+                int to;
+                Cap cap;
+                Cost cost;
+            };
+        - vector<vector<residual_edge>> graph.residual_graph()
+            : 現在の残余グラフを返す．
+              返り値の[v]には，残余グラフにおいてvから出る辺が入る．
+              各辺eについて，
+                - e.to   : 行き先
+                - e.cap  : 残余容量
+                - e.cost : 残余辺のコスト
+              を表す．
+              残余容量が正の辺のみを返す．
 
 
     [計算時間]
@@ -187,6 +202,26 @@ template <class Cap, class Cost> struct mcf_graph {
             prev_cost_per_flow = d;
         }
         return result;
+    }
+
+    struct residual_edge {
+        int to;
+        Cap cap;     // 残余容量
+        Cost cost;   // 残余辺のコスト
+    };
+
+    std::vector<std::vector<residual_edge>> residual_graph() const {
+        std::vector<std::vector<residual_edge>> res(_n);
+
+        for (int v = 0; v < _n; v++) {
+            for (const auto& e : g[v]) {
+                if (e.cap > 0) {
+                    res[v].push_back(residual_edge{e.to, e.cap, e.cost});
+                }
+            }
+        }
+
+        return res;
     }
 
   private:

@@ -29,7 +29,7 @@
         - 
         
     [使用例]
-        vector<int> a, b;
+        vector<int> a, b; //長さは2冪の必要がある
         auto && c = Bitwise_convolution::xor_convolution<int>(a,b); (結果の配列cが得られる)
 
 */
